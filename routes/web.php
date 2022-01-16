@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserPermissionController;
@@ -35,6 +36,9 @@ Route::get('/banned-user-list', [UserPermissionController::class, 'getBannedUser
 Route::get('/edit-user/{user}', [UserPermissionController::class, 'editUser'])->middleware('auth','checkRole')->name('edit-user');
 Route::post('/edit-user/{user}', [UserPermissionController::class, 'updateUser'])->middleware('auth','checkRole')->name('update-user');
 Route::get('/change-user-status/{id}', [UserPermissionController::class, 'status'])->middleware(['auth','checkRole'])->name('user.status');
+
+Route::resource('/category', CategoryController::class)->middleware(['auth','checkRole']);
+Route::get('/change-category-status/{id}', [CategoryController::class, 'status'])->middleware(['auth','checkRole'])->name('category.status');
 
 
 

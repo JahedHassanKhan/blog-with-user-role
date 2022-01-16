@@ -23,17 +23,17 @@
                         <li><a href="{{route('role.index')}}" class="" key="t-horizontal">Manage Role</a></li>
                     </ul>
                 </li>
-{{--                <li>--}}
-{{--                    <a href="javascript: void(0);" class="has-arrow waves-effect">--}}
-{{--                        <i class="bx bx-store"></i>--}}
-{{--                        <span>Site Settings</span>--}}
-{{--                    </a>--}}
-{{--                    <ul class="sub-menu" aria-expanded="false">--}}
-{{--                        <li><a href="{{route('category.index')}}">Category</a></li>--}}
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bx-store"></i>
+                        <span>Site Settings</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('category.index')}}">Category</a></li>
 {{--                        <li><a href="{{route('tag.index')}}">Tag</a></li>--}}
 {{--                        <li><a href="{{route('company')}}">Site Info</a></li>--}}
-{{--                    </ul>--}}
-{{--                </li>--}}
+                    </ul>
+                </li>
 {{--                <li>--}}
 {{--                    <a href="javascript: void(0);" class="has-arrow waves-effect">--}}
 {{--                        <i class="bx bx-store"></i>--}}
