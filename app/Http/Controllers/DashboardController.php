@@ -8,6 +8,7 @@ use App\Models\UserInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class DashboardController extends Controller
@@ -20,9 +21,15 @@ class DashboardController extends Controller
             $this->user = $user;
             $userRoles = $user->roles;
             $userRoute = [];
-            foreach ($user->roles as $role){
-                foreach ($role->roleRoutes as $routes){
-                    array_push($userRoute, $routes->route_name);
+            if($user->type == 1){
+                foreach (Route::getRoutes()->getRoutes() as $key => $route){
+                    array_push($userRoute, $route->getName());
+                }
+            } else{
+                foreach ($user->roles as $role){
+                    foreach ($role->roleRoutes as $routes){
+                        array_push($userRoute, $routes->route_name);
+                    }
                 }
             }
             $this->userRoute = $userRoute;
@@ -37,36 +44,54 @@ class DashboardController extends Controller
     }
 
     public function index(){
-        return view('backend.dashboard.dashboard');
+        $userRoutes = $this->userRoute;
+        return view('backend.dashboard.dashboard', compact('userRoutes'));
     }
     public function personalInformation(){
+        $userRoutes = $this->userRoute;
         $user = Auth::user();
         $personalInformation = UserInformation::get();
         if ($personalInformation->count() > 0) {
             $personalInformation = UserInformation::where('user_id', $user->id)->first();
-            return view('backend.dashboard.edit-personal-information', compact('personalInformation'));
+            if ($personalInformation){
+                return view('backend.dashboard.edit-personal-information', compact('personalInformation', 'userRoutes'));
+            } else{
+                return view('backend.dashboard.personal-information', compact('personalInformation', 'userRoutes'));
+            }
         }else {
-            return view('backend.dashboard.personal-information');
+            return view('backend.dashboard.personal-information', compact('personalInformation', 'userRoutes'));
         }
     }
-    public function personalInformationUpdate(Request $request){
+
+    public function personalInformationUpdate(Request $request)
+    {
         $user = Auth::user();
         $personalInformation = UserInformation::get();
         if ($personalInformation->count() > 0) {
             $personalInformation = UserInformation::where('user_id', $user->id)->first();
-            $this->savePersonalInformation($personalInformation, $request);
-            $personalInformation->save();
-            return redirect(route('dashboard'))->with('message', 'Personal Information Update Successfully');
-        }else{
+            if ($personalInformation) {
+                $this->savePersonalInformation($personalInformation, $request);
+                $personalInformation->save();
+                return redirect(route('dashboard'))->with('message', 'Personal Information Update Successfully');
+            } else {
+                $personalInformation = new UserInformation();
+                $personalInformation->user_id = $user->id;
+                $this->savePersonalInformation($personalInformation, $request);
+                $personalInformation->save();
+                return redirect(route('dashboard'))->with('message', 'Personal Information Stored Successfully');
+
+            }
+        } else {
             $personalInformation = new UserInformation();
-            $personalInformation->user_id     = $user->id;
+            $personalInformation->user_id = $user->id;
             $this->savePersonalInformation($personalInformation, $request);
             $personalInformation->save();
             return redirect(route('dashboard'))->with('message', 'Personal Information Stored Successfully');
         }
     }
     public function changePasswordForm(){
-        return view('backend.dashboard.change-password');
+        $userRoutes = $this->userRoute;
+        return view('backend.dashboard.change-password', compact('userRoutes'));
     }
     public function changePassword(Request $request){
         $request->validate([
@@ -92,6 +117,7 @@ class DashboardController extends Controller
             }
             $personalInformation->image = $this->imageUpload($image, $this->profileImageDirectory());
         }
+//        return $request->all();
         $personalInformation->father_name           =   $request->father_name;
         $personalInformation->mother_name           =   $request->mother_name;
         $personalInformation->dob                   =   $request->dob;

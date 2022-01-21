@@ -18,9 +18,21 @@
                         <span>Manage User</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{route('user-list')}}">User List</a></li>
-                        <li><a href="{{route('banned-user-list')}}">Banned User List</a></li>
-                        <li><a href="{{route('role.index')}}" class="" key="t-horizontal">Manage Role</a></li>
+                        @foreach($userRoutes as $userRoute)
+                            @if($userRoute == 'user-list')
+                                <li><a href="{{route('user-list')}}">User List</a></li>
+                            @endif
+                        @endforeach
+                        @foreach($userRoutes as $userRoute)
+                            @if($userRoute == 'banned-user-list')
+                                <li><a href="{{route('banned-user-list')}}">Banned User List</a></li>
+                            @endif
+                        @endforeach
+                        @foreach($userRoutes as $userRoute)
+                            @if($userRoute == 'role.index')
+                                <li><a href="{{route('role.index')}}" class="" key="t-horizontal">Manage Role</a></li>
+                            @endif
+                        @endforeach
                     </ul>
                 </li>
                 <li>
@@ -29,7 +41,11 @@
                         <span>Site Settings</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{route('category.index')}}">Category</a></li>
+                        @foreach($userRoutes as $userRoute)
+                            @if($userRoute == 'category.index')
+                                <li><a href="{{route('category.index')}}">Category</a></li>
+                            @endif
+                        @endforeach
 {{--                        <li><a href="{{route('tag.index')}}">Tag</a></li>--}}
 {{--                        <li><a href="{{route('company')}}">Site Info</a></li>--}}
                     </ul>

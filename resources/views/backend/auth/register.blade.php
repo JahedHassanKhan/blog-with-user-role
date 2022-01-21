@@ -36,10 +36,8 @@
                                 <form class="needs-validation" novalidate action="{{route('register')}}" method="post">
                                     @csrf
                                     <div class="mb-3">
-                                        @if ($errors->has('name'))
-                                            <span class="text-danger">
-                                                <strong>{{ $errors->first('name') }}</strong>
-                                            </span>
+                                        @if($errors->has('name'))
+                                            <span class="text-danger"><strong>{{ $errors->first('name') }}</strong></span>
                                         @endif
                                         <label for="name" class="form-label">User Name</label>
                                         <input type="text" class="form-control" name="name" id="name" placeholder="Enter User Name" required>

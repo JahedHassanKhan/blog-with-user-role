@@ -55,6 +55,9 @@ Category
                         <label for="categoryName" class="col-form-label col-lg-2">Category Name</label>
                         <div class="col-lg-10">
                             <input id="categoryName" name="name" type="text" class="form-control" placeholder="Enter Category Name..." required>
+                            @if($errors->has('name'))
+                                <span class="text-danger"><strong>{{ $errors->first('name') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <div class="row mb-4">

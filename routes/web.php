@@ -23,6 +23,11 @@ Route::get('/login', [AuthController::class, 'loginForm'])->middleware('guest')-
 Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth')->name('logout');
 
+Route::get('forget-password', [AuthController::class, 'showForgetPasswordForm'])->name('forget.password.get');
+Route::post('forget-password', [AuthController::class, 'submitForgetPasswordForm'])->name('forget.password.post');
+Route::get('reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('reset-password', [AuthController::class, 'submitResetPasswordForm'])->name('reset.password.post');
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 Route::get('/personal-information', [DashboardController::class, 'personalInformation'])->middleware('auth')->name('personal-information');
 Route::post('/personal-information', [DashboardController::class, 'personalInformationUpdate'])->middleware('auth')->name('personal-information.store');
@@ -39,7 +44,6 @@ Route::get('/change-user-status/{id}', [UserPermissionController::class, 'status
 
 Route::resource('/category', CategoryController::class)->middleware(['auth','checkRole']);
 Route::get('/change-category-status/{id}', [CategoryController::class, 'status'])->middleware(['auth','checkRole'])->name('category.status');
-
 
 
 Route::get('/', function () {

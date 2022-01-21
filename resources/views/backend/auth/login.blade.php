@@ -85,6 +85,9 @@
                                             </li>
                                         </ul>
                                     </div>
+                                    <div class="mt-4 text-center">
+                                        <a href="{{ route('forget.password.get') }}" class="text-muted"><i class="mdi mdi-lock me-1"></i> Forgot your password?</a>
+                                    </div>
                                 </form>
                             </div>
                         </div>

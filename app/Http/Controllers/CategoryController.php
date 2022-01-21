@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -17,9 +21,15 @@ class CategoryController extends Controller
             $this->user = $user;
             $userRoles = $user->roles;
             $userRoute = [];
-            foreach ($user->roles as $role){
-                foreach ($role->roleRoutes as $routes){
-                    array_push($userRoute, $routes->route_name);
+            if($user->type == 1){
+                foreach (Route::getRoutes()->getRoutes() as $key => $route){
+                    array_push($userRoute, $route->getName());
+                }
+            } else{
+                foreach ($user->roles as $role){
+                    foreach ($role->roleRoutes as $routes){
+                        array_push($userRoute, $routes->route_name);
+                    }
                 }
             }
             $this->userRoute = $userRoute;
@@ -39,8 +49,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::with('createdBy', 'updatedBy')->get();
-        return view('backend.category.manageCategory', compact('categories'));
+        $userRoutes = $this->userRoute;
+        $categories = CategoryResource::collection(Category::all());
+
+//        return $collection;
+//        $categories = Category::with('createdBy', 'updatedBy')->get();
+        return view('backend.category.manageCategory', compact('categories', 'userRoutes'));
     }
 
     /**
@@ -59,10 +73,11 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         $category = new Category();
         $category -> created_by      =  $this->user->id;
+        $category -> slug            =       Str::slug($request->name . '-' . Carbon::now()->format('Y' . 'm' . 'd' . 'h' . 'm' . 's' . 'v'));
         $this->saveCategory($category, $request);
         $category -> save();
         return redirect()->back()->with('message', 'Category add successfully!');
@@ -87,7 +102,10 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('backend.category.edit-category', compact('category'));
+        $r = new CategoryResource($category);
+//        return $this->userRoute;
+        $userRoutes = $this->userRoute;
+        return view('backend.category.edit-category', compact('category', 'userRoutes'));
     }
 
     /**
@@ -97,7 +115,7 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
         $category->updated_by   =   $this->user->id;
         $this->saveCategory($category, $request);
@@ -145,7 +163,6 @@ class CategoryController extends Controller
         }
         $category -> main_category      =       $request->main_category;
         $category -> name               =       $request->name;
-        $category -> slug               =       Str::slug($request->name);
         $category -> status             =       $request->status;
     }
 

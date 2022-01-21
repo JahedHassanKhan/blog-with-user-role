@@ -20,9 +20,15 @@ class RoleController extends Controller
             $this->user = $user;
             $userRoles = $user->roles;
             $userRoute = [];
-            foreach ($user->roles as $role){
-                foreach ($role->roleRoutes as $routes){
-                    array_push($userRoute, $routes->route_name);
+            if($user->type == 1){
+                foreach (Route::getRoutes()->getRoutes() as $key => $route){
+                    array_push($userRoute, $route->getName());
+                }
+            } else{
+                foreach ($user->roles as $role){
+                    foreach ($role->roleRoutes as $routes){
+                        array_push($userRoute, $routes->route_name);
+                    }
                 }
             }
             $this->userRoute = $userRoute;
@@ -44,6 +50,7 @@ class RoleController extends Controller
      */
     public function index()
     {
+        $userRoutes     = $this->userRoute;
         $roles          =   Role::with('roleRoutes')->get();
         $routeLists     =   Route::getRoutes();
         $result         =   [];
@@ -57,7 +64,8 @@ class RoleController extends Controller
         }
         return view('backend.role.index', [
             'routeLists'    => $result,
-            'roles'         => $roles
+            'roles'         => $roles,
+            'userRoutes'    => $userRoutes,
         ]);
     }
 
@@ -82,7 +90,7 @@ class RoleController extends Controller
         try {
             $user = Auth::user();
             $role               =   new Role();
-            $role->created_by   =   $user->id;
+            $role->created_by   =   $this->user->id;
             $this->saveRole($role, $request);
             $role->save();
             $this->saveRoute($request, $role);
@@ -112,6 +120,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        $userRoutes = $this->userRoute;
 //        $role          =   Role::with('roleRoutes')->find($id);
         $routeLists     =   Route::getRoutes();
         $result         =   [];
@@ -125,7 +134,8 @@ class RoleController extends Controller
         }
         return view('backend.role.edit', [
             'routeLists'    => $result,
-            'role'         => $role
+            'role'         => $role,
+            'userRoutes'    => $userRoutes,
         ]);
     }
 
@@ -140,7 +150,7 @@ class RoleController extends Controller
     {
         try {
             $user = Auth::user();
-            $role->updated_by         = $user->id;
+            $role->updated_by         = $this->user->id;
             $this->saveRole($role, $request);
             $role->save();
             $role->roleRoutes()->delete();

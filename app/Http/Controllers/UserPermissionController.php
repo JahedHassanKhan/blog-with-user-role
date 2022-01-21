@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use phpDocumentor\Reflection\Type;
 
 class UserPermissionController extends Controller
@@ -18,9 +19,15 @@ class UserPermissionController extends Controller
             $this->user = $user;
             $userRoles = $user->roles;
             $userRoute = [];
-            foreach ($user->roles as $role){
-                foreach ($role->roleRoutes as $routes){
-                    array_push($userRoute, $routes->route_name);
+            if($user->type == 1){
+                foreach (Route::getRoutes()->getRoutes() as $key => $route){
+                    array_push($userRoute, $route->getName());
+                }
+            } else{
+                foreach ($user->roles as $role){
+                    foreach ($role->roleRoutes as $routes){
+                        array_push($userRoute, $routes->route_name);
+                    }
                 }
             }
             $this->userRoute = $userRoute;
@@ -35,14 +42,16 @@ class UserPermissionController extends Controller
     }
 
     public function getUserList(){
+        $userRoutes     = $this->userRoute;
         $users = User::where('status', 1)->where( 'type', 0)->get();
         $roles   = Role::all();
-        return view('backend.user-list.user-list', compact('users', 'roles'));
+        return view('backend.user-list.user-list', compact('users', 'roles', 'userRoutes'));
     }
     public function editUser($user){
+        $userRoutes     = $this->userRoute;
         $user = User::find($user);
         $roles   = Role::all();
-        return view('backend.user-list.edit-user', compact('user', 'roles'));
+        return view('backend.user-list.edit-user', compact('user', 'roles', 'userRoutes'));
     }
     public function updateUser(Request $request, User $user){
 
@@ -50,9 +59,10 @@ class UserPermissionController extends Controller
         return redirect(route('user-list'));
     }
     public function getBannedUserList(){
+        $userRoutes     = $this->userRoute;
         $users = User::where('status', 0)->where( 'type', 0)->get();
         $roles   = Role::all();
-        return view('backend.user-list.banned-user-list', compact('users', 'roles'));
+        return view('backend.user-list.banned-user-list', compact('users', 'roles', 'userRoutes'));
     }
     public function status($id)
     {
