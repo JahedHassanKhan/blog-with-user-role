@@ -1,0 +1,74 @@
+/**
+ * ----------------------------------------------------------------------------------------
+ * Variables
+ * ----------------------------------------------------------------------------------------
+ */
+/**************************************************/
+/*************ACTIVE COLOR THEME*******************/
+/**************************************************/
+:root {
+    --font_family_body: 'Poppins', sans-serif;
+    --font_family_heading: 'Public Sans', sans-serif;
+    --site-color: #fecb2f;
+}
+
+
+
+
+.heading-title:after,
+table td:hover,
+table th:hover,
+.btn_gurd,
+.hover_light:after,
+.lateps_postslides .item:hover .post_data_cr,
+.gutengard_btn,
+.widget_title:before,
+.widget_categories ul li:before,
+.widget_tag_cloud .tagcloud a:hover,
+.page-numbers li a:hover,
+.page-numbers li .current,
+.blog_post_item_image:hover .post_data_cr,
+.single_post_content li:before,
+.post_data_publiс,
+.tagspost a:hover,
+.comment-reply:after,
+.page_dafulet li:before,
+.filter_image_btns .filter:after {
+  background-color: var(--site-color);
+}
+blockquote:after,
+.preloader i,
+.lateps_postslides .post_info_wrapper .seea_more a:hover,
+.categories_slides .category_box:hover .name_cat,
+.blog_post_item .seea_more a:hover,
+.header_image .breadcrumbs .page-list li a,
+.single_post_content p a,
+.page_dafulet a,
+.widget_recent_post .post_data i {
+  color: var(--site-color);
+}
+.btn_gurd_trp {
+  border: 1px solid var(--site-color);
+}
+.top_nav_links .navbar-nav .current-menu-item > a span {
+  border-bottom: 1px solid var(--site-color);
+}
+.widget_tag_cloud .tagcloud a {
+  border: 1px solid var(--site-color);
+}
+.author_image {
+  border: 2px solid var(--site-color);
+}
+.tagspost a {
+  border: 1px solid var(--site-color);
+}
+.post_navigation .prevous_post .prev_img,
+.post_navigation .next_post .prev_img {
+  border: 2px solid var(--site-color);
+}
+.avatar_comment {
+  border: 2px solid var(--site-color);
+}
+.author_card_imag {
+  border: 2px solid var(--site-color);
+}

@@ -2,8 +2,15 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CompanyInfoController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FrontEndHomeController;
+use App\Http\Controllers\PhotoCategoryController;
+use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserPermissionController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,7 +52,32 @@ Route::get('/change-user-status/{id}', [UserPermissionController::class, 'status
 Route::resource('/category', CategoryController::class)->middleware(['auth','checkRole']);
 Route::get('/change-category-status/{id}', [CategoryController::class, 'status'])->middleware(['auth','checkRole'])->name('category.status');
 
+Route::resource('/tag', TagController::class)->middleware(['auth','checkRole']);
+Route::get('/change-tag-status/{id}', [TagController::class, 'status'])->middleware(['auth','checkRole'])->name('tag.status');
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('/');
+Route::resource('/post', PostController::class)->middleware(['auth','checkRole']);
+Route::get('/change-post-status/{id}', [PostController::class, 'status'])->middleware(['auth','checkRole'])->name('post.status');
+Route::get('/all-post-table', [PostController::class, 'allPostTable'])->middleware(['auth','checkRole'])->name('all-post-table');
+Route::get('/set-category-by-main-category', [PostController::class, 'setCategory'])->middleware(['auth','checkRole'])->name('set-category-by-main-category');
+
+Route::resource('/photo-category', PhotoCategoryController::class)->middleware(['auth','checkRole']);
+Route::get('/change-photo-category-status/{id}', [PhotoCategoryController::class, 'status'])->middleware(['auth','checkRole'])->name('photoCategory.status');
+
+Route::resource('/photo', PhotoController::class)->middleware(['auth','checkRole']);
+Route::get('/change-photo-status/{id}', [PhotoController::class, 'status'])->middleware(['auth','checkRole'])->name('photo.status');
+
+Route::get('/company', [CompanyInfoController::class, 'index'])->name('company.index')->middleware(['auth']);
+Route::post('/company', [CompanyInfoController::class, 'store'])->name('company')->middleware(['auth']);
+
+//Route::get('/', function () {
+//    return view('welcome');
+//})->name('/');
+
+Route::get('/', [FrontEndHomeController::class, 'index'])->name('/') ;
+Route::get('/blogPost/{post}', [FrontEndHomeController::class, 'singlePost'])->name('blogPost');
+Route::get('/category/{category}', [FrontEndHomeController::class, 'categoryPost'])->name('categoryPost');
+Route::get('/gallery', [FrontEndHomeController::class, 'photoPage'])->name('photoPage');
+Route::get('/author/{id}', [FrontEndHomeController::class, 'author'])->name('author');
+
+Route::post('/reply/{id}', [ReplyController::class, 'store'])->middleware(['auth'])->name('reply');
+Route::post('/reply-reply/{reply}', [ReplyController::class, 'replyReply'])->middleware(['auth'])->name('replyReply');

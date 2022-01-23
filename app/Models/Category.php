@@ -17,4 +17,7 @@ class Category extends Model
     public function updatedBy(){
         return $this->belongsTo(User::class, 'updated_by', 'id');
     }
+    public function posts(){
+        return $this->belongsToMany(Post::class,  'post_categories');
+    }
 }

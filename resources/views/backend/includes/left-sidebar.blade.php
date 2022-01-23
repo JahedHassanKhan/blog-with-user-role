@@ -46,30 +46,54 @@
                                 <li><a href="{{route('category.index')}}">Category</a></li>
                             @endif
                         @endforeach
-{{--                        <li><a href="{{route('tag.index')}}">Tag</a></li>--}}
-{{--                        <li><a href="{{route('company')}}">Site Info</a></li>--}}
+                        @foreach($userRoutes as $userRoute)
+                            @if($userRoute == 'tag.index')
+                                <li><a href="{{route('tag.index')}}">Tag</a></li>
+                            @endif
+                        @endforeach
+                        @foreach($userRoutes as $userRoute)
+                            @if($userRoute == 'company.index')
+                                <li><a href="{{route('company.index')}}">Site Info</a></li>
+                            @endif
+                        @endforeach
                     </ul>
                 </li>
-{{--                <li>--}}
-{{--                    <a href="javascript: void(0);" class="has-arrow waves-effect">--}}
-{{--                        <i class="bx bx-store"></i>--}}
-{{--                        <span>Gallery</span>--}}
-{{--                    </a>--}}
-{{--                    <ul class="sub-menu" aria-expanded="false">--}}
-{{--                        <li><a href="{{route('photo-category.index')}}">Photo Category</a></li>--}}
-{{--                        <li><a href="{{route('photo.index')}}">Photo</a></li>--}}
-{{--                    </ul>--}}
-{{--                </li>--}}
-{{--                <li>--}}
-{{--                    <a href="javascript: void(0);" class="has-arrow waves-effect">--}}
-{{--                        <i class="bx bx-detail"></i>--}}
-{{--                        <span>Blog</span>--}}
-{{--                    </a>--}}
-{{--                    <ul class="sub-menu" aria-expanded="false">--}}
-{{--                        <li><a href="{{route('post.index')}}">All Post</a></li>--}}
-{{--                        <li><a href="{{route('post.create')}}">Create New Post</a></li>--}}
-{{--                    </ul>--}}
-{{--                </li>--}}
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bx-store"></i>
+                        <span>Gallery</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        @foreach($userRoutes as $userRoute)
+                            @if($userRoute == 'photo-category.index')
+                                <li><a href="{{route('photo-category.index')}}">Photo Category</a></li>
+                            @endif
+                        @endforeach
+                        @foreach($userRoutes as $userRoute)
+                            @if($userRoute == 'photo.index')
+                                <li><a href="{{route('photo.index')}}">Photo</a></li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bx-detail"></i>
+                        <span>Blog</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        @foreach($userRoutes as $userRoute)
+                            @if($userRoute == 'post.index')
+                                <li><a href="{{route('post.index')}}">All Post</a></li>
+                            @endif
+                        @endforeach
+                        @foreach($userRoutes as $userRoute)
+                            @if($userRoute == 'post.create')
+                                <li><a href="{{route('post.create')}}">Create New Post</a></li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </li>
             </ul>
         </div>
         <!-- Sidebar -->

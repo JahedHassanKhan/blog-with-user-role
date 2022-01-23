@@ -58,16 +58,6 @@ class CategoryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -82,18 +72,6 @@ class CategoryController extends Controller
         $category -> save();
         return redirect()->back()->with('message', 'Category add successfully!');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
-    {
-        //
-    }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -102,7 +80,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        $r = new CategoryResource($category);
+        $category = new CategoryResource($category);
 //        return $this->userRoute;
         $userRoutes = $this->userRoute;
         return view('backend.category.edit-category', compact('category', 'userRoutes'));
@@ -132,7 +110,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        unlink($category->category_image);
+        if ($category->image) {
+            if (file_exists($category->image)) {
+                unlink($category->image);
+            }
+        }
         $category->delete();
         return redirect(route('category.index'))->with('message', 'Category deleted successfully');
     }
@@ -150,7 +132,6 @@ class CategoryController extends Controller
         $category->save();
         return redirect()->back()->with('message', $message);
     }
-
     private function saveCategory($category, $request){
         $image  = $request->file('image');
         if ($image) {
@@ -165,7 +146,6 @@ class CategoryController extends Controller
         $category -> name               =       $request->name;
         $category -> status             =       $request->status;
     }
-
     private function imageUpload($image, $directory){
 //        $type = $image->getClientOriginalExtension();
         $imageName = Str::camel($image->getClientOriginalName());
