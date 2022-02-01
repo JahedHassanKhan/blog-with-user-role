@@ -40,4 +40,9 @@ class  Post extends Model
                 ->where('session_id', '=', request()->getSession()->getId())
                 ->orWhere('user_id', '=', (auth()->check()));})->exists();
     }
+
+    public function likes(){
+        return $this->morphMany(Like::class,  'likeable');
+    }
+
 }

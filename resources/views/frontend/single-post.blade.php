@@ -92,9 +92,26 @@
                         </div>
                     </div>
                     <!--END Post Category and Tags-->
-                    <div class="action-count">
-                        <span class="comments_count"><i class="fas fa-comments"></i> {{$post->replies->count()}} Comments</span>
-                        <span class="reviews_count"><i class="fas fa-eye"></i> {{$post->views}} Views</span>
+                    <div class="action-count d-md-flex justify-content-md-between">
+                        <div class="">
+                            <span class="comments_count"><i class="fas fa-comments"></i> {{$post->replies->count()}} Comments</span>
+                            <span class="reviews_count"><i class="fas fa-eye"></i> {{$post->views}} Views</span>
+                        </div>
+                        <div class="">
+                            <form action="{{ route('like') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="likeable_type" value="{{ get_class($post) }}"/>
+                                <input type="hidden" name="id" value="{{ $post->id }}"/>
+                                <button class="border-0 bg-transparent">
+                                    @if($userLike->count() >0)
+                                        <span class="reviews_count"><i class="fas fa-thumbs-up text-success"></i></span>
+                                    @else
+                                        <span class="reviews_count"><i class="fas fa-thumbs-up"></i></span>
+                                    @endif
+                                </button> {{ trans_choice('{0} no like|{1} :count like|[2,*] :count likes', count($post->likes), ['count' => count($post->likes)]) }}
+                            </form>
+
+                        </div>
                     </div>
                 </div>
             </div>

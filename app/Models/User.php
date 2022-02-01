@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Likeable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -52,5 +53,12 @@ class User extends Authenticatable
     }
     public function tags(){
         return $this->hasMany(Tag::class);
+    }
+
+    // other user stuff...
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
     }
 }

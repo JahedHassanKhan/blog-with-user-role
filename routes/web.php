@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CompanyInfoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FrontEndHomeController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PhotoCategoryController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\PostController;
@@ -81,3 +82,8 @@ Route::get('/author/{id}', [FrontEndHomeController::class, 'author'])->name('aut
 
 Route::post('/reply/{id}', [ReplyController::class, 'store'])->middleware(['auth'])->name('reply');
 Route::post('/reply-reply/{reply}', [ReplyController::class, 'replyReply'])->middleware(['auth'])->name('replyReply');
+
+Route::middleware('auth')->group(function () {
+    Route::post('like', [LikeController::class,'like'])->name('like');
+    Route::delete('like', [LikeController::class,'unlike'])->name('unlike');
+});

@@ -40,7 +40,8 @@ class FrontEndHomeController extends Controller
     }
     public function singlePost(Post $post)
     {
-//        return $post->categories ;
+        $userLike = Auth::user()->likes->where('likeable_id', $post->id);
+//        return $userLike;
         $company = CompanyInfo::first();
         $banglaCategories = Category::where('main_category', 1)->get();
         $englishCategories = Category::where('main_category', 2)->get();
@@ -54,12 +55,12 @@ class FrontEndHomeController extends Controller
 //        Some bits from the following query ("category", "user") are made for my own application, but I felt like leaving it for inspiration.
         if($post->showPost()){// this will test if the user viwed the post or not
             PostView::createViewLog($post);
-            return view('frontend.single-post', compact('post',  'tags', 'allPosts', 'previous', 'next', 'categories', 'englishCategories', 'norwegianCategories', 'banglaCategories', 'company'));
+            return view('frontend.single-post', compact('post',  'tags', 'allPosts', 'previous', 'next', 'categories', 'englishCategories', 'norwegianCategories', 'banglaCategories', 'company', 'userLike'));
         }
 
         $post->increment('views');//I have a separate column for views in the post table. This will increment the views column in the posts table.
         PostView::createViewLog($post);
-        return view('frontend.single-post', compact('post',  'tags', 'allPosts', 'previous', 'next', 'categories', 'englishCategories', 'norwegianCategories', 'banglaCategories', 'company'));
+        return view('frontend.single-post', compact('post',  'tags', 'allPosts', 'previous', 'next', 'categories', 'englishCategories', 'norwegianCategories', 'banglaCategories', 'company', 'userLike'));
 
 
 
